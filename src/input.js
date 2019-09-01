@@ -16,7 +16,9 @@ export default class InputHandler {
           break;
         case 32:
           game.start();
+          break;
         default:
+          break;
       }
     });
 

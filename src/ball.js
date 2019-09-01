@@ -49,7 +49,7 @@ export default class Ball {
 
     if (this.position.y + this.size > this.gameHeight) {
       this.game.lives--;
-      this.reset;
+      this.reset();
     }
 
     if (detectCollision(this, this.game.paddle)) {
