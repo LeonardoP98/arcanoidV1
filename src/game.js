@@ -11,30 +11,43 @@ const GAMESTATE = {
   MENU: 2,
   GAMEOVER: 3
 };
+
 export default class Game {
   constructor(gameWidth, gameHeight) {
     this.gameWidth = gameWidth;
 
     this.gameHeight = gameHeight;
-  }
 
-  start() {
     this.gamestate = GAMESTATE.MENU;
+
     this.ball = new Ball(this);
 
     this.paddle = new Paddle(this);
+
+    this.gameObjects = [];
+
+    this.lives = 1;
+
+    new InputHandler(this.paddle, this);
+  }
+
+  start() {
+    if (this.gamestate !== GAMESTATE.MENU) return;
 
     let bricks = buildLevel(this, level1);
 
     this.gameObjects = [this.ball, this.paddle, ...bricks];
 
-    new InputHandler(this.paddle, this);
+    this.gamestate = GAMESTATE.RUNNING;
   }
 
   update(deltaTime) {
+    if (this.lives === 0) this.gamestate = GAMESTATE.GAMEOVER;
+
     if (
       this.gamestate === GAMESTATE.PAUSED ||
-      this.gamestate === GAMESTATE.MENU
+      this.gamestate === GAMESTATE.MENU ||
+      this.gamestate === GAMESTATE.GAMEOVER
     )
       return;
 
@@ -57,6 +70,32 @@ export default class Game {
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
       ctx.fillText("Pause", this.gameWidth / 2, this.gameHeight / 2);
+    }
+
+    if (this.gamestate === GAMESTATE.MENU) {
+      ctx.rect(0, 0, this.gameWidth, this.gameHeight);
+      ctx.fillStyle = "rgb(0,0,0,1)";
+      ctx.fill();
+
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.fillText(
+        "Press spacebar to start",
+        this.gameWidth / 2,
+        this.gameHeight / 2
+      );
+    }
+
+    if (this.gamestate === GAMESTATE.GAMEOVER) {
+      ctx.rect(0, 0, this.gameWidth, this.gameHeight);
+      ctx.fillStyle = "rgb(0,0,0,1)";
+      ctx.fill();
+
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.fillText("GAME OVER", this.gameWidth / 2, this.gameHeight / 2);
     }
   }
 
