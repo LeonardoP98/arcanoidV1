@@ -2,7 +2,7 @@ import Paddle from "/src/paddle";
 import InputHandler from "/src/input";
 import Ball from "/src/ball";
 
-import { buildLevel, level1, level2, level3 } from "/src/levels";
+import { buildLevel, level1, level2, level3, level4 } from "/src/levels";
 
 const GAMESTATE = {
   PAUSED: 0,
@@ -28,7 +28,7 @@ export default class Game {
     this.bricks = [];
     this.lives = 1;
 
-    this.levels = [level1, level2, level3];
+    this.levels = [level1, level2, level3, level4];
     this.currentLevel = 0;
 
     new InputHandler(this.paddle, this);
